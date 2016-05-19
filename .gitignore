@@ -8,3 +8,7 @@
 # intellij specific files
 .idea/
 *.iml
+target/
+
+# files generated on EA run
+*.out
