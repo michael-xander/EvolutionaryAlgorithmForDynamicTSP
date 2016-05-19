@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Chromosome {
@@ -32,6 +33,19 @@ public class Chromosome {
             cityList[randomNum] = temp;
         }
 
+        calculateCost(cities);
+    }
+
+    /**
+     * @param cities Utilised to calculate the chromosome cost
+     * @param cityList The order that the chromosome is to traverse the cities
+     */
+    Chromosome(City[]cities, int[] cityList)
+    {
+        this.cityList = new int[cities.length];
+
+        //set the new values of the city list
+        setCities(cityList);
         calculateCost(cities);
     }
 
@@ -87,6 +101,66 @@ public class Chromosome {
         cityList[index] = value;
     }
 
+    /**
+     * Creates mutated offspring of chromosome
+     * @param cities list of cities
+     * @return The mutated offspring
+     */
+    Chromosome mutate(City[] cities)
+    {
+        Random generator = new Random();
+
+        //using 3-point exchange
+        int[] threePoints = new int[3];
+        threePoints[0] = threePoints[1] = threePoints[2] = 0;
+
+        // get three unique values
+        while((threePoints[0] == threePoints[1]) || (threePoints[0] == threePoints[2]) || (threePoints[1] == threePoints[2]))
+        {
+            threePoints[0] = generator.nextInt(cityList.length);
+            threePoints[1] = generator.nextInt(cityList.length);
+            threePoints[2] = generator.nextInt(cityList.length);
+        }
+        // sort values in ascending order
+        Arrays.sort(threePoints);
+        ArrayList<Integer> tempArr = new ArrayList<Integer>();
+
+        int i = 0;
+        while(true)
+        {
+            // if the start point, move to the point after the mid point
+            if(i == threePoints[0])
+            {
+                i = threePoints[1]+1;
+            }
+            else if(i == threePoints[2])
+            {
+                // if last point, add items from start to mid point to collection
+                for(int y = threePoints[0]; y <= threePoints[1]; y++)
+                {
+                    tempArr.add(cityList[y]);
+                }
+                tempArr.add(cityList[i]);
+                i++;
+            }
+            else
+            {
+                tempArr.add(cityList[i]);
+                i++;
+            }
+            if(i >= cityList.length)
+                break;
+        }
+
+        int[] mutantCityList = new int[cityList.length];
+        for(int j = 0; j < mutantCityList.length; j++)
+        {
+            mutantCityList[j] = tempArr.get(j);
+        }
+
+        Chromosome mutant = new Chromosome(cities, mutantCityList);
+        return mutant;
+    }
     /**
      * Sort the chromosomes by their cost.
      *
