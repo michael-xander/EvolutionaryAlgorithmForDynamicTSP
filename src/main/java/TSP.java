@@ -1,10 +1,7 @@
 import java.awt.*;
 import java.io.*;
 import java.text.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
-import java.util.ArrayList;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -76,6 +73,7 @@ public class TSP {
     private static Panel statsArea;
     private static TextArea statsText;
 
+    private static int numberOfOffspring = 10;
 
     /*
      * Writing to an output file with the costs.
@@ -107,6 +105,27 @@ public class TSP {
 
     public static void evolve() {
         //Write evolution code here.
+        ArrayList<Chromosome> chromosomePool = new ArrayList<Chromosome>();
+
+        for(Chromosome chromosome : chromosomes)
+        {
+            chromosomePool.add(chromosome);
+
+            for(int i = 0; i < numberOfOffspring; i++)
+            {
+                Chromosome offSpring = chromosome.mutate(cities);
+                chromosomePool.add(offSpring);
+            }
+        }
+        Collections.sort(chromosomePool);
+
+        Chromosome[] rankedChromosomes = new Chromosome[chromosomes.length];
+        for(int i = 0; i < rankedChromosomes.length; i++)
+        {
+            rankedChromosomes[i] = chromosomePool.get(i);
+        }
+        chromosomes = rankedChromosomes;
+
     }
 
     /**

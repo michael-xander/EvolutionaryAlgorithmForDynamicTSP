@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class Chromosome {
+public class Chromosome implements Comparable<Chromosome> {
 
     /**
      * The list of cities, which are the genes of this chromosome.
@@ -160,6 +160,16 @@ public class Chromosome {
 
         Chromosome mutant = new Chromosome(cities, mutantCityList);
         return mutant;
+    }
+
+    /**
+     * Compares two chromosomes based on their costs
+     * @param other chromosome to compare against
+     * @return 0 if equal, < 0 if other chromosome is greater and > 0 if other chromosome is lesser
+     */
+    public int compareTo(Chromosome other)
+    {
+        return Double.compare(this.cost, other.cost);
     }
     /**
      * Sort the chromosomes by their cost.
