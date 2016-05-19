@@ -279,7 +279,14 @@ public class TSP {
                     while (generation < 100) {
                         evolve();
                         if(generation % 5 == 0 ) 
+                        {
                             cities = MoveCities(originalCities); //Move from original cities, so they only move by a maximum of one unit.
+                            //update the costs of the chromosomes
+                            for(Chromosome chromosome : chromosomes)
+                            {
+                                chromosome.calculateCost(cities);
+                            }
+                        }
                         generation++;
 
                         Chromosome.sortChromosomes(chromosomes, populationSize);
