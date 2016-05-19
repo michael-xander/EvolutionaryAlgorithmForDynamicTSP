@@ -260,7 +260,7 @@ public class TSP {
                 max = 0;
                 sum = 0;
 
-                originalCities = cities = LoadCitiesFromFile("CityList.txt", cities);
+                originalCities = cities = LoadCitiesFromFile("src/main/resources/CityList.txt", cities);
 
                 writeLog("Run Stats for experiment at: " + currentTime);
                 for (int y = 1; y <= runs; y++) {
