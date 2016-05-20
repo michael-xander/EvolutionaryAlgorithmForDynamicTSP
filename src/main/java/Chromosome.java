@@ -103,6 +103,53 @@ public class Chromosome implements Comparable<Chromosome> {
     }
 
     /**
+     * Generates mutated offspring of chromosome using translocation
+     * @param cities list of cities
+     * @return The mutated offspring
+     */
+    Chromosome mutateWithTranslocation(City[] cities)
+    {
+        Random generator = new Random();
+
+        // pos 1 is that of the chosen genotype and 2 is that to insert in
+        int[] twoPoints = new int[2];
+        twoPoints[0] = twoPoints[1] = 0;
+
+        //get two unique values
+        while(twoPoints[0] == twoPoints[1])
+        {
+            twoPoints[0] = generator.nextInt(cityList.length);
+            twoPoints[1] = generator.nextInt(cityList.length);
+        }
+
+        ArrayList<Integer> tempArr = new ArrayList<Integer>();
+        for(int i = 0; i < cityList.length; i++)
+        {
+            tempArr.add(cityList[i]);
+        }
+
+        if(twoPoints[0] < twoPoints[1])
+        {
+            tempArr.add(twoPoints[1], tempArr.get(twoPoints[0]));
+            tempArr.remove(twoPoints[0]);
+        }
+        else
+        {
+            tempArr.add(twoPoints[1], tempArr.get(twoPoints[0]));
+            //since items have been moved to the right, position has been increased by 1
+            tempArr.remove(twoPoints[0]+1);
+        }
+
+        int[] mutantList = new int[cityList.length];
+        for(int i = 0; i < mutantList.length; i++)
+        {
+            mutantList[i] = tempArr.get(i);
+        }
+
+        Chromosome mutant = new Chromosome(cities, mutantList);
+        return mutant;
+    }
+    /**
      * Generates mutated offspring of chromosome using Inversion
      * @param cities list of cities
      * @return The mutated offspring
