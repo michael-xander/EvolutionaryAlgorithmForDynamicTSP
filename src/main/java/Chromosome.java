@@ -117,9 +117,9 @@ public class Chromosome implements Comparable<Chromosome> {
         // get three unique values
         while((threePoints[0] == threePoints[1]) || (threePoints[0] == threePoints[2]) || (threePoints[1] == threePoints[2]))
         {
-            threePoints[0] = generator.nextInt(cityList.length);
-            threePoints[1] = generator.nextInt(cityList.length);
-            threePoints[2] = generator.nextInt(cityList.length);
+            threePoints[0] = generator.nextInt(cityList.length+1);
+            threePoints[1] = generator.nextInt(cityList.length+1);
+            threePoints[2] = generator.nextInt(cityList.length+1);
         }
         // sort values in ascending order
         Arrays.sort(threePoints);
@@ -143,11 +143,13 @@ public class Chromosome implements Comparable<Chromosome> {
                         tempArr.add(cityList[y]);
                     }
                 }
-                tempArr.add(cityList[i]);
+                //to cater for scenarios when the third point is 50
+                if(i < cityList.length)
+                    tempArr.add(cityList[i]);
             }
             i++;
 
-            if(i >= cityList.length)
+            if(i > cityList.length)
                 break;
         }
 
