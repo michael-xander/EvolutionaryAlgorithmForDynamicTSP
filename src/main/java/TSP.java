@@ -1,10 +1,7 @@
 import java.awt.*;
 import java.io.*;
 import java.text.*;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
-import java.util.ArrayList;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -76,6 +73,7 @@ public class TSP {
     private static Panel statsArea;
     private static TextArea statsText;
 
+    private static int numberOfMutations = 100;
 
     /*
      * Writing to an output file with the costs.
@@ -107,6 +105,22 @@ public class TSP {
 
     public static void evolve() {
         //Write evolution code here.
+        Chromosome.sortChromosomes(chromosomes, chromosomes.length);
+        Chromosome parent = chromosomes[0];
+
+        for(int i = 0; i < numberOfMutations; i++)
+        {
+            Chromosome mutant = parent.mutateWith3Point(cities);
+
+            for(int j = 0; j < chromosomes.length; j++)
+            {
+                if(mutant.getCost() < chromosomes[j].getCost())
+                {
+                    chromosomes[j] = mutant;
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -260,7 +274,7 @@ public class TSP {
                 max = 0;
                 sum = 0;
 
-                originalCities = cities = LoadCitiesFromFile("CityList.txt", cities);
+                originalCities = cities = LoadCitiesFromFile("src/main/resources/CityList.txt", cities);
 
                 writeLog("Run Stats for experiment at: " + currentTime);
                 for (int y = 1; y <= runs; y++) {
@@ -279,7 +293,14 @@ public class TSP {
                     while (generation < 100) {
                         evolve();
                         if(generation % 5 == 0 ) 
+                        {
                             cities = MoveCities(originalCities); //Move from original cities, so they only move by a maximum of one unit.
+                            //update the costs of the chromosomes
+                            for(Chromosome chromosome : chromosomes)
+                            {
+                                chromosome.calculateCost(cities);
+                            }
+                        }
                         generation++;
 
                         Chromosome.sortChromosomes(chromosomes, populationSize);
