@@ -110,7 +110,7 @@ public class TSP {
 
         for(int i = 0; i < numberOfMutations; i++)
         {
-            Chromosome mutant = parent.mutate(cities);
+            Chromosome mutant = parent.mutateWith3Point(cities);
 
             for(int j = 0; j < chromosomes.length; j++)
             {

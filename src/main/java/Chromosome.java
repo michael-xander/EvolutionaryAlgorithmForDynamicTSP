@@ -106,7 +106,7 @@ public class Chromosome implements Comparable<Chromosome> {
      * @param cities list of cities
      * @return The mutated offspring
      */
-    Chromosome mutate(City[] cities)
+    Chromosome mutateWith3Point(City[] cities)
     {
         Random generator = new Random();
 
