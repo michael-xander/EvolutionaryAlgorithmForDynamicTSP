@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class Chromosome implements Comparable<Chromosome> {
@@ -102,7 +103,111 @@ public class Chromosome implements Comparable<Chromosome> {
     }
 
     /**
-     * Creates mutated offspring of chromosome
+     * Generates mutated offspring of chromosome using translocation
+     * @param cities list of cities
+     * @return The mutated offspring
+     */
+    Chromosome mutateWithTranslocation(City[] cities)
+    {
+        Random generator = new Random();
+
+        // pos 1 is that of the chosen genotype and 2 is that to insert in
+        int[] twoPoints = new int[2];
+        twoPoints[0] = twoPoints[1] = 0;
+
+        //get two unique values
+        while(twoPoints[0] == twoPoints[1])
+        {
+            twoPoints[0] = generator.nextInt(cityList.length);
+            twoPoints[1] = generator.nextInt(cityList.length);
+        }
+
+        ArrayList<Integer> tempArr = new ArrayList<Integer>();
+        for(int i = 0; i < cityList.length; i++)
+        {
+            tempArr.add(cityList[i]);
+        }
+
+        if(twoPoints[0] < twoPoints[1])
+        {
+            tempArr.add(twoPoints[1], tempArr.get(twoPoints[0]));
+            tempArr.remove(twoPoints[0]);
+        }
+        else
+        {
+            tempArr.add(twoPoints[1], tempArr.get(twoPoints[0]));
+            //since items have been moved to the right, position has been increased by 1
+            tempArr.remove(twoPoints[0]+1);
+        }
+
+        int[] mutantList = new int[cityList.length];
+        for(int i = 0; i < mutantList.length; i++)
+        {
+            mutantList[i] = tempArr.get(i);
+        }
+
+        Chromosome mutant = new Chromosome(cities, mutantList);
+        return mutant;
+    }
+    /**
+     * Generates mutated offspring of chromosome using Inversion
+     * @param cities list of cities
+     * @return The mutated offspring
+     */
+    Chromosome mutateWithInversion(City[] cities)
+    {
+        Random generator = new Random();
+
+        int[] twoPoints = new int[2];
+        twoPoints[0] = twoPoints[1] = 0;
+
+        //get two unique values
+        while(twoPoints[0] == twoPoints[1])
+        {
+            twoPoints[0] = generator.nextInt(cityList.length);
+            twoPoints[1] = generator.nextInt(cityList.length);
+        }
+        //sort the values in ascending order
+        Arrays.sort(twoPoints);
+
+        int[] mutantCityList = Arrays.copyOf(cityList, cityList.length);
+        int segmentLength = (twoPoints[1]-twoPoints[0])+1;
+        int[] segment = new int[segmentLength];
+
+        for(int turn = 0; turn < 2; turn++)
+        {
+            if(turn == 1)
+            {
+                //reverse the segment
+                for(int i = 0; i < segment.length / 2; i++)
+                {
+                    int temp = segment[i];
+                    segment[i] = segment[segment.length - i - 1];
+                    segment[segment.length - i - 1] = temp;
+                }
+            }
+
+            for(int i = 0; i < segmentLength; i++)
+            {
+                if(turn == 0)
+                {
+                    //get the items for the segment
+                    segment[i] = mutantCityList[(twoPoints[0]+i)];
+                }
+                else
+                {
+                    //fill into the list the reverse items
+                    mutantCityList[(twoPoints[0]+i)] = segment[i];
+                }
+            }
+        }
+
+        Chromosome mutant = new Chromosome(cities, mutantCityList);
+        return mutant;
+    }
+
+    /**
+     * Creates mutated offspring of chromosome using 3 Point Exchange
      * @param cities list of cities
      * @return The mutated offspring
      */
