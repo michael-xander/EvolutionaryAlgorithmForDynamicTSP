@@ -131,23 +131,22 @@ public class Chromosome implements Comparable<Chromosome> {
             // if the start point, move to the point after the mid point
             if(i == threePoints[0])
             {
-                i = threePoints[1]+1;
-            }
-            else if(i == threePoints[2])
-            {
-                // if last point, add items from start to mid point to collection
-                for(int y = threePoints[0]; y <= threePoints[1]; y++)
-                {
-                    tempArr.add(cityList[y]);
-                }
-                tempArr.add(cityList[i]);
-                i++;
+                i = threePoints[1];
             }
             else
             {
+                if(i == threePoints[2])
+                {
+                    //if last point, add items from start to mid point to collection
+                    for(int y = threePoints[0]; y <= threePoints[1]; y++)
+                    {
+                        tempArr.add(cityList[y]);
+                    }
+                }
                 tempArr.add(cityList[i]);
-                i++;
             }
+            i++;
+
             if(i >= cityList.length)
                 break;
         }
