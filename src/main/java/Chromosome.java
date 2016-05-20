@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class Chromosome implements Comparable<Chromosome> {
@@ -102,7 +103,64 @@ public class Chromosome implements Comparable<Chromosome> {
     }
 
     /**
-     * Creates mutated offspring of chromosome
+     * Generates mutated offspring of chromosome using Inversion
+     * @param cities list of cities
+     * @return The mutated offspring
+     */
+    Chromosome mutateWithInversion(City[] cities)
+    {
+        Random generator = new Random();
+
+        int[] twoPoints = new int[2];
+        twoPoints[0] = twoPoints[1] = 0;
+
+        //get two unique values
+        while(twoPoints[0] == twoPoints[1])
+        {
+            twoPoints[0] = generator.nextInt(cityList.length);
+            twoPoints[1] = generator.nextInt(cityList.length);
+        }
+        //sort the values in ascending order
+        Arrays.sort(twoPoints);
+
+        int[] mutantCityList = Arrays.copyOf(cityList, cityList.length);
+        int segmentLength = (twoPoints[1]-twoPoints[0])+1;
+        int[] segment = new int[segmentLength];
+
+        for(int turn = 0; turn < 2; turn++)
+        {
+            if(turn == 1)
+            {
+                //reverse the segment
+                for(int i = 0; i < segment.length / 2; i++)
+                {
+                    int temp = segment[i];
+                    segment[i] = segment[segment.length - i - 1];
+                    segment[segment.length - i - 1] = temp;
+                }
+            }
+
+            for(int i = 0; i < segmentLength; i++)
+            {
+                if(turn == 0)
+                {
+                    //get the items for the segment
+                    segment[i] = mutantCityList[(twoPoints[0]+i)];
+                }
+                else
+                {
+                    //fill into the list the reverse items
+                    mutantCityList[(twoPoints[0]+i)] = segment[i];
+                }
+            }
+        }
+
+        Chromosome mutant = new Chromosome(cities, mutantCityList);
+        return mutant;
+    }
+
+    /**
+     * Creates mutated offspring of chromosome using 3 Point Exchange
      * @param cities list of cities
      * @return The mutated offspring
      */
