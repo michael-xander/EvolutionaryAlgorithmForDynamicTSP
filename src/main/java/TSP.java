@@ -73,7 +73,7 @@ public class TSP {
     private static Panel statsArea;
     private static TextArea statsText;
 
-    private static int numberOfOffspring = 10;
+    private static int numberOfMutations = 100;
 
     /*
      * Writing to an output file with the costs.
@@ -105,27 +105,22 @@ public class TSP {
 
     public static void evolve() {
         //Write evolution code here.
-        ArrayList<Chromosome> chromosomePool = new ArrayList<Chromosome>();
+        Chromosome.sortChromosomes(chromosomes, chromosomes.length);
+        Chromosome parent = chromosomes[0];
 
-        for(Chromosome chromosome : chromosomes)
+        for(int i = 0; i < numberOfMutations; i++)
         {
-            chromosomePool.add(chromosome);
+            Chromosome mutant = parent.mutate(cities);
 
-            for(int i = 0; i < numberOfOffspring; i++)
+            for(int j = 0; j < chromosomes.length; j++)
             {
-                Chromosome offSpring = chromosome.mutate(cities);
-                chromosomePool.add(offSpring);
+                if(mutant.getCost() < chromosomes[j].getCost())
+                {
+                    chromosomes[j] = mutant;
+                    break;
+                }
             }
         }
-        Collections.sort(chromosomePool);
-
-        Chromosome[] rankedChromosomes = new Chromosome[chromosomes.length];
-        for(int i = 0; i < rankedChromosomes.length; i++)
-        {
-            rankedChromosomes[i] = chromosomePool.get(i);
-        }
-        chromosomes = rankedChromosomes;
-
     }
 
     /**
