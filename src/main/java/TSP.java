@@ -120,8 +120,9 @@ public class TSP {
                     break;
                 }
             }
+            /*
             if(mutant.getCost() < parent.getCost())
-                parent = mutant;
+                parent = mutant;*/
         }
     }
 
