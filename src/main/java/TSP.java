@@ -120,9 +120,18 @@ public class TSP {
                     break;
                 }
             }
+            //code to shift to current best chromosome during mutation. Works best when using cities and paired with above code
             /*
             if(mutant.getCost() < parent.getCost())
                 parent = mutant;*/
+
+            //code that removes worst performing chromosome. Works best when using cities
+            /*
+            if(mutant.getCost() < chromosomes[chromosomes.length-1].getCost())
+            {
+                chromosomes[chromosomes.length-1] = mutant;
+                Chromosome.sortChromosomes(chromosomes, chromosomes.length);
+            }*/
         }
     }
 
