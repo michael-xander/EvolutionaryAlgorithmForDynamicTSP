@@ -110,28 +110,15 @@ public class TSP {
 
         for(int i = 0; i < numberOfMutations; i++)
         {
-            Chromosome mutant = parent.mutateWithInversion(originalCities);
 
-            for(int j = 0; j < chromosomes.length; j++)
-            {
-                if(mutant.getCost() < chromosomes[j].getCost())
-                {
-                    chromosomes[j] = mutant;
-                    break;
-                }
-            }
-            //code to shift to current best chromosome during mutation. Works best when using cities and paired with above code
-            /*
-            if(mutant.getCost() < parent.getCost())
-                parent = mutant;*/
-
-            //code that removes worst performing chromosome. Works best when using cities
-            /*
+            Chromosome mutant = parent.mutateWithInversion(cities);
+            // remove worst performing chromosome if mutant is better
             if(mutant.getCost() < chromosomes[chromosomes.length-1].getCost())
             {
                 chromosomes[chromosomes.length-1] = mutant;
                 Chromosome.sortChromosomes(chromosomes, chromosomes.length);
-            }*/
+            }
+            parent = chromosomes[0];
         }
     }
 
